@@ -501,7 +501,7 @@ def iniciar_cerebro():
     # 🔴 APAGAMOS O CHROMA E AGORA LIGAMOS DIRETO NO PINECONE:
     banco_base = PineconeVectorStore(index_name="mentorvet", embedding=embeddings)
     
-    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.2)
+    llm = ChatGoogleGenerativeAI(model="gemini-3.6-flash", temperature=0.2)
     
     return embeddings, banco_base, llm
 
