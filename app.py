@@ -805,7 +805,7 @@ if texto_pergunta or uploaded_file:
             contexto_cientifico = buscar_pubmed(texto_pergunta)
             texto_combinado += f"\n\nLiteratura Científica Recente (PubMed):\n{contexto_cientifico}"
 
-        prompt_especialista = f"""
+prompt_especialista = f"""
             Você é o MentorVet, um Diplomado pelo Colégio Americano de Medicina Veterinária Interna (ACVIM) e preceptor sênior de excelência do IFMG Bambuí.
             Sua linguagem deve ser estritamente técnica, acadêmica e encorajadora. Nunca dê respostas rasas ou genéricas.
             Você é o MentorVet, um assistente veterinário especialista, rápido e altamente objetivo.
@@ -824,7 +824,7 @@ if texto_pergunta or uploaded_file:
 
             Solicitação do Aluno / Descrição da Imagem:
             {texto_pergunta}
-
+        """
 
         # Remove o indicador de carregamento antes de escrever a resposta final
         loading_placeholder.empty()
