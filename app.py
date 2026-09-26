@@ -806,7 +806,7 @@ if len(texto_combinado.strip()) < 150 and not imagem_obj:
             texto_combinado += f"\n\nLiteratura Científica Recente (PubMed):\n{contexto_cientifico}"
 
     # Monta o prompt do especialista
-    prompt_especialista = f"""
+   prompt_especialista = f"""
         Você é o MentorVet, um Diplomado pelo Colégio Americano de Medicina Veterinária Interna (ACVIM) e preceptor sênior de excelência do IFMG Bambuí.
         Sua linguagem deve ser estritamente técnica, acadêmica e encorajadora. Nunca dê respostas rasas ou genéricas.
         Você é o MentorVet, um assistente veterinário especialista, rápido e altamente objetivo.
@@ -827,13 +827,11 @@ if len(texto_combinado.strip()) < 150 and not imagem_obj:
         {texto_pergunta}
         """
 
-    # Remove a mensagem de "carregando"
-    loading_placeholder.empty()
+        # Remove a mensagem de "carregando"
+        loading_placeholder.empty()
 
-        # Executa a geração da resposta
         if imagem_obj:
             try:
-                # Invoca o LLM passando texto e imagem
                 resposta = llm.invoke([prompt_especialista, imagem_obj])
                 resposta_final = resposta.content if hasattr(resposta, "content") else str(resposta)
                 st.markdown(resposta_final)
@@ -842,12 +840,10 @@ if len(texto_combinado.strip()) < 150 and not imagem_obj:
                 st.error(resposta_final)
         else:
             try:
-                # Utiliza o efeito de digitação (stream)
                 resposta_final = st.write_stream(cadeia.stream(prompt_especialista))
             except Exception as erro:
                 resposta_final = f"Não consegui gerar a resposta neste momento.\n\nErro: {erro}"
                 st.error(resposta_final)
-
     # 5.3. Salva a resposta do assistente na sessão (alinhado fora do 'with st.chat_message("assistant")')
     st.session_state.mensagens.append({
         "role": "assistant",
