@@ -10,3 +10,12 @@ pillow
 python-dotenv
 pandas
 sentence-transformers
+streamlit
+langchain
+langchain-community
+langchain-google-genai
+langchain-huggingface
+langchain-pinecone
+pinecone-client
+python-dotenv
+sentence-transformers
