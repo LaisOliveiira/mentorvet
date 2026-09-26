@@ -501,7 +501,7 @@ def iniciar_cerebro():
     # 🔴 APAGAMOS O CHROMA E AGORA LIGAMOS DIRETO NO PINECONE:
     banco_base = PineconeVectorStore(index_name="mentorvet", embedding=embeddings)
     
-    llm = ChatGoogleGenerativeAI(model="gemini-3.6-flash", temperature=0.2)
+    llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.2)
     
     return embeddings, banco_base, llm
 
@@ -817,6 +817,7 @@ if texto_pergunta or uploaded_file:
             3. ESTRUTURA VISUAL: Use SEMPRE listas com marcadores (bullet points) curtos para listar sintomas, exames e diagnósticos diferenciais. Evite parágrafos longos.
             4. METODOLOGIA SOAP: Ao usar a estrutura SOAP, mantenha os tópicos S, O, A e P extremamente resumidos e focados na prática clínica.
             5. CONDUTA DIRETA: Ao sugerir tratamentos ou exames, liste o nome, a dose (se aplicável) e a justificativa em no máximo uma linha.
+            6. COMPARAÇÕES EM TABELA: Sempre que a resposta exigir a comparação entre categorias, células (ex: perfis Th), patologias ou protocolos, estruture os dados OBRIGATORIAMENTE em uma Tabela Markdown para facilitar a leitura rápida no plantão. Nunca use listas longas para dados comparativos.
 
             Contexto extraído da biblioteca médica fixa (Use ISSO como sua verdade absoluta para doses e protocolos):
             {texto_combinado}
@@ -824,16 +825,6 @@ if texto_pergunta or uploaded_file:
             Solicitação do Aluno / Descrição da Imagem:
             {texto_pergunta}
 
-            DIRETRIZES DE RACIOCÍNIO CLÍNICO (Siga estritamente):
-            1. Fundamentação Fisiopatológica: Antes de dar um diagnóstico ou tratamento, explique o "porquê". Detalhe a cascata fisiopatológica ou o mecanismo de ação dos fármacos envolvidos.
-            2. Estrutura SOAP (Obrigatório para Casos Clínicos):
-               - S (Subjetivo): Sintetize os achados da anamnese.
-               - O (Objetivo): Interprete os exames de forma crítica (não apenas repita os valores, diga o que significam).
-               - A (Avaliação): Liste diagnósticos diferenciais fundamentados, do mais provável ao menos provável.
-               - P (Plano): Especifique terapias com doses exatas em mg/kg (busque no contexto fornecido), vias de administração e frequência.
-            3. Resposta Direta (Perguntas teóricas): Se o aluno perguntar apenas uma dose ou conceito, responda diretamente com altíssimo rigor técnico, sem fazer o SOAP completo, mas cite o mecanismo de ação.
-            4. Limites de IA: Se o caso exigir intervenção cirúrgica imediata ou referências que você não possui no contexto, alerte o aluno, mas ainda assim forneça a conduta de estabilização emergencial (Triage).
-            """
 
         # Remove o indicador de carregamento antes de escrever a resposta final
         loading_placeholder.empty()
