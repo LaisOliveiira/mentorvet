@@ -19,9 +19,9 @@ retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
 # 4. Configura a IA da Groq (Llama 3.3 70B - rápido, preciso e gratuito)
 llm = ChatGroq(
-    model_name="llama-3.3-70b-versatile",
+    model_name="llama3-70b-8192",
     temperature=0.2,
-    groq_api_key=os.getenv("GROQ_API_KEY")
+    groq_api_key=groq_key
 )
 
 # 5. O PROMPT MESTRE (Guardrails)
