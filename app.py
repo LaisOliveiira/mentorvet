@@ -438,12 +438,17 @@ def buscar_pubmed(termo, max_resultados=2):
 
 @st.cache_resource
 def iniciar_cerebro():
-    os.environ['PINECONE_API_KEY'] = 'pcsk_4wxRZ7_BmYg6AxjJCSSmBmjAqP7x5mipWZNQRiYH8PnHK6Eg2PosBBCMyXG46J7XzoyoA8'
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    banco_base = PineconeVectorStore(index_name="mentorvet", embedding=embeddings)
-# OPÇÃO RECOMENDADA (Mais rápida e amplamente disponível na API v1beta):
-    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.2) 
-    return embeddings, banco_base, llm
+     os.environ['PINECONE_API_KEY'] = 'pcsk_4wxRZ7_BmYg6AxjJCSSmBmjAqP7x5mipWZNQRiYH8PnHK6Eg2PosBBCMyXG46J7XzoyoA8'
+     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+     banco_base = PineconeVectorStore(index_name="mentorvet", embedding=embeddings)
+
+     llm = ChatGoogleGenerativeAI(
+        model="models/gemini-1.5-flash",
+        temperature=0.2,
+        google_api_key=os.getenv("GOOGLE_API_KEY") # garante que lê do .env
+         )
+    
+     return embeddings, banco_base, llm
 
 embeddings, banco_base, llm = iniciar_cerebro()
 
