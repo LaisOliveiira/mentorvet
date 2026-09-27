@@ -451,10 +451,10 @@ def iniciar_cerebro():
     banco_base = PineconeVectorStore(index_name="mentorvet", embedding=embeddings)
     
     llm = ChatGroq(
-        model_name="llama3-70b-8192",
-        temperature=0.2,
-        groq_api_key=groq_key
-    )
+    model_name="llama-3.1-8b-instant",
+    temperature=0.2,
+    groq_api_key=groq_key
+)
     return embeddings, banco_base, llm
 embeddings, banco_base, llm = iniciar_cerebro()
 
