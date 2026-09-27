@@ -4,9 +4,9 @@ import pandas as pd
 import streamlit as st
 
 from dotenv import load_dotenv
+from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.output_parsers import StrOutputParser
@@ -438,17 +438,16 @@ def buscar_pubmed(termo, max_resultados=2):
 
 @st.cache_resource
 def iniciar_cerebro():
-     os.environ['PINECONE_API_KEY'] = 'pcsk_4wxRZ7_BmYg6AxjJCSSmBmjAqP7x5mipWZNQRiYH8PnHK6Eg2PosBBCMyXG46J7XzoyoA8'
-     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-     banco_base = PineconeVectorStore(index_name="mentorvet", embedding=embeddings)
-
-     llm = ChatGoogleGenerativeAI(
-        model="models/gemini-1.5-flash",
-        temperature=0.2,
-        google_api_key=os.getenv("GOOGLE_API_KEY") # garante que lê do .env
-         )
+    os.environ['PINECONE_API_KEY'] = 'pcsk_4wxRZ7_BmYg6AxjJCSSmBmjAqP7x5mipWZNQRiYH8PnHK6Eg2PosBBCMyXG46J7XzoyoA8'
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    banco_base = PineconeVectorStore(index_name="mentorvet", embedding=embeddings)
     
-     return embeddings, banco_base, llm
+    # Usa o modelo Llama 3 de alta velocidade e 100% gratuito
+    llm = ChatGroq(
+        model_name="llama-3.3-70b-versatile",
+        temperature=0.2
+    )
+    return embeddings, banco_base, llm
 
 embeddings, banco_base, llm = iniciar_cerebro()
 
