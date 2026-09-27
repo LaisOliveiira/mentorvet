@@ -441,7 +441,8 @@ def iniciar_cerebro():
     os.environ['PINECONE_API_KEY'] = 'pcsk_4wxRZ7_BmYg6AxjJCSSmBmjAqP7x5mipWZNQRiYH8PnHK6Eg2PosBBCMyXG46J7XzoyoA8'
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     banco_base = PineconeVectorStore(index_name="mentorvet", embedding=embeddings)
-    llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.2)
+# OPÇÃO RECOMENDADA (Mais rápida e amplamente disponível na API v1beta):
+    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.2) 
     return embeddings, banco_base, llm
 
 embeddings, banco_base, llm = iniciar_cerebro()
