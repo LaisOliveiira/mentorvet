@@ -2,23 +2,27 @@ import os
 from dotenv import load_dotenv
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 
-# 1. Carrega sua chave do Google (arquivo .env)
+# 1. Carrega as variáveis do arquivo .env (onde deve estar GROQ_API_KEY)
 load_dotenv()
 
-# 2. Carrega o mesmo modelo matemático que usamos para ler o PDF
+# 2. Carrega o mesmo modelo matemático de embeddings
 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
-# 3. Conecta ao banco de dados que você criou
+# 3. Conecta ao banco de dados vetorial local (Chroma)
 vectorstore = Chroma(persist_directory="./banco_vetorial", embedding_function=embeddings)
 retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
-# 4. Configura o Gemini
-llm = ChatGoogleGenerativeAI(model="gemini-3.6-flash", temperature=0)
+# 4. Configura a IA da Groq (Llama 3.3 70B - rápido, preciso e gratuito)
+llm = ChatGroq(
+    model_name="llama-3.3-70b-versatile",
+    temperature=0.2,
+    groq_api_key=os.getenv("GROQ_API_KEY")
+)
 
 # 5. O PROMPT MESTRE (Guardrails)
 system_prompt = (
@@ -35,11 +39,11 @@ prompt = ChatPromptTemplate.from_messages([
     ("human", "{input}"),
 ])
 
-# 6. Função auxiliar para extrair o texto dos parágrafos encontrados
+# 6. Função auxiliar para extrair e formatar os trechos encontrados
 def formatar_documentos(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
-# 7. Monta o sistema RAG com a arquitetura moderna (LCEL)
+# 7. Monta a cadeia RAG com a arquitetura LCEL
 rag_chain = (
     {"context": retriever | formatar_documentos, "input": RunnablePassthrough()}
     | prompt
@@ -50,7 +54,7 @@ rag_chain = (
 print("🐾 VetTutor Iniciado! (Digite 'sair' para encerrar)")
 print("Faça uma pergunta sobre o assunto do PDF que você subiu.")
 
-# 8. Loop de conversa
+# 8. Loop de conversa via terminal
 while True:
     pergunta_usuario = input("\nSua pergunta: ")
     
@@ -63,7 +67,6 @@ while True:
         
     print("Buscando nos livros e raciocinando...")
     
-    # A IA invoca a busca, formata o texto, joga no prompt e gera a resposta
     resposta = rag_chain.invoke(pergunta_usuario)
     
     print("\n--- RESPOSTA DO VETTUTOR ---")
